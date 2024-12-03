@@ -1,7 +1,11 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 import models
+from dtos.users import UserDto
+from mapper.mapper import ResponseMapper
 from services.service_factory import UserService
 
 router = APIRouter(
@@ -11,6 +15,6 @@ router = APIRouter(
 
 
 @router.get('/')
-def get_all_users(service: UserService):
+def get_all_users(service: UserService, mapper: ResponseMapper) -> List[UserDto]:
     users = service.get_all()
-    return users
+    return mapper.map("user_dto", users)
