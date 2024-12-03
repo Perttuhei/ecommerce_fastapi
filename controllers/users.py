@@ -1,9 +1,5 @@
 from typing import List
-
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-
-import models
+from fastapi import APIRouter
 from dtos.users import UserDto
 from mapper.mapper import ResponseMapper
 from services.service_factory import UserService
