@@ -1,0 +1,6 @@
+sqlalchemy
+mysql-connector-python
+fastapi
+uvicorn[standard]
+bcrypt
+pyjwt
