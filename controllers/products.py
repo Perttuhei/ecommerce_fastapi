@@ -1,6 +1,9 @@
 from typing import List
 from fastapi import APIRouter
+
+from dtos.products import ProductDto
 from mapper.mapper import ResponseMapper
+from services.service_factory import ProductService
 
 router = APIRouter(
     prefix='/api/products',

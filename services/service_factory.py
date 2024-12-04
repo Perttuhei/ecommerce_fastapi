@@ -13,5 +13,5 @@ def init_user_service(context: models.Db):
 def init_product_service(context: models.Db):
     return ProductSaService(context)
 
-ProductService = Annotated[ProductServiceBase, Depends(init_product_service())]
+ProductService = Annotated[ProductServiceBase, Depends(init_product_service)]
 UserService = Annotated[UserServiceBase, Depends(init_user_service)]
