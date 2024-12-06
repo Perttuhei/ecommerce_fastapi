@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import APIRouter
+from fastapi_pagination import Page, paginate
 
 from dtos.products import ProductDto
 from mapper.mapper import ResponseMapper
@@ -11,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.get('/')
+@router.get('/', response_model=Page[ProductDto])
 def get_all_products(service: ProductService, mapper: ResponseMapper) -> List[ProductDto]:
     products = service.get_all()
-    return mapper.map("product_dto", products)
+    return paginate(mapper.map("product_dto", products))
