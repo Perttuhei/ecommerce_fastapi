@@ -12,3 +12,10 @@ class UpdateProductDto(BaseModel):
     name: str
     unitprice: float
     description: str
+
+class AddProductReqDto(BaseModel):
+    Name: str
+    CategoryId: int
+    UnitPrice: float
+    Description: str
+
