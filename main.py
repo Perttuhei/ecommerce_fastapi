@@ -1,6 +1,6 @@
 from flask.cli import load_dotenv
 
-from controllers import users, products
+from controllers import users, products, categories
 
 load_dotenv()
 from fastapi import FastAPI
@@ -13,3 +13,4 @@ add_pagination(app)
 
 app.include_router(users.router)
 app.include_router(products.router)
+app.include_router(categories.router)
