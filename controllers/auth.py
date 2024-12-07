@@ -22,7 +22,7 @@ def get_user_by_id(user_id: int, service: UserService, mapper: ResponseMapper) -
     user = service.get_by_id(user_id)
     return mapper.map("user_dto", user)
 
-@router.post('/')
+@router.post('/register')
 def create_user(service: UserService, req: AddUserReqDto, mapper: ResponseMapper) -> UserDto:
     user = service.create(req)
     return mapper.map("user_dto", user)

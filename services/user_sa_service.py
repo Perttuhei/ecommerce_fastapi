@@ -1,6 +1,7 @@
 import bcrypt
 
 import models
+from custom_exceptions.username_taken_exception import UsernameTakenException
 from dtos.users import UpdateUserDto, AddUserReqDto
 from services.user_service_base import UserServiceBase
 
@@ -29,6 +30,9 @@ class UserSaService(UserServiceBase):
         return user
 
     def create(self, req: AddUserReqDto) -> models.Users:
+        user_exists = self.context.query(models.Users).filter(models.Users.UserName == req.UserName).first()
+        if user_exists is not None:
+            raise UsernameTakenException('username already taken')
         user = models.Users(
             UserName=req.UserName,
             HashedPassword=bcrypt.hashpw(req.Password.encode('utf-8'), bcrypt.gensalt()),
