@@ -8,3 +8,8 @@ class UserDto(BaseModel):
 
 class UpdateUserDto(BaseModel):
     username: str
+
+class AddUserReqDto(BaseModel):
+    UserName: str
+    Password: str
+    Role: str
