@@ -4,6 +4,7 @@ from fastapi import Depends
 from starlette.requests import Request
 
 import models
+from custom_exceptions.forbidden_exception import ForbiddenException
 from custom_exceptions.unauthorized_exception import UnauthorizedException
 from services.service_factory import UserService
 from tools.token_factory import AppToken
@@ -28,14 +29,14 @@ def get_moderator_user(service: UserService, token: AppToken, req: Request) -> m
     loggedInUser = get_logged_in_user(service, token, req)
     role = loggedInUser.Role
     if role != 'moderator':
-        raise UnauthorizedException('moderator role required')
+        raise ForbiddenException()
     return loggedInUser
 
 def get_admin_user(service: UserService, token: AppToken, req: Request) -> models.Users:
     loggedInUser = get_logged_in_user(service, token, req)
     role = loggedInUser.Role
     if role != 'admin':
-        raise UnauthorizedException('admin role required')
+        raise ForbiddenException()
     return loggedInUser
 
 ModeratorUser = Annotated[models.Users, Depends(get_moderator_user)]
