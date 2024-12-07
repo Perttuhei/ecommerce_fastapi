@@ -13,3 +13,10 @@ class AddUserReqDto(BaseModel):
     UserName: str
     Password: str
     Role: str
+
+class LoginReqDto(BaseModel):
+    username: str
+    password: str
+
+class LoginResDto(BaseModel):
+    token: str

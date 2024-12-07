@@ -1,9 +1,10 @@
 from typing import List
 from fastapi import APIRouter
 from fastapi_pagination import Page, paginate
-from dtos.users import AddUserReqDto, UserDto, UpdateUserDto
+from dtos.users import AddUserReqDto, UserDto, UpdateUserDto, LoginReqDto, LoginResDto
 from mapper.mapper import ResponseMapper
 from services.service_factory import UserService
+from tools.token_factory import AppToken
 
 router = APIRouter(
     prefix='/api/auth',
@@ -31,3 +32,8 @@ def create_user(service: UserService, req: AddUserReqDto, mapper: ResponseMapper
 def update_user(user_id: int, service: UserService, mapper: ResponseMapper, req_data: UpdateUserDto) -> UserDto:
     user = service.update_user(user_id, req_data)
     return mapper.map("user_dto", user)
+
+@router.post('/login')
+async def login(service: UserService, req: LoginReqDto, _token: AppToken) -> LoginResDto:
+    token = service.login(req, _token)
+    return LoginResDto(token=token)

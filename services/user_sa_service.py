@@ -1,9 +1,12 @@
+import datetime
+from typing import List
 import bcrypt
-
 import models
+from custom_exceptions.not_found_exception import NotFoundException
 from custom_exceptions.username_taken_exception import UsernameTakenException
-from dtos.users import UpdateUserDto, AddUserReqDto
+from dtos.users import UpdateUserDto, AddUserReqDto, LoginReqDto
 from services.user_service_base import UserServiceBase
+from tools.token_tool_base import TokenToolBase
 
 
 class UserSaService(UserServiceBase):
@@ -12,15 +15,15 @@ class UserSaService(UserServiceBase):
         self.context = context
 
 
-    def get_all(self):
+    def get_all(self) -> List[models.Users]:
         users = self.context.query(models.Users).all()
         return users
 
-    def get_by_id(self, user_id: int):
+    def get_by_id(self, user_id: int) -> models.Users:
         user = self.context.query(models.Users).filter(models.Users.Id == user_id).first()
         return user
 
-    def update_user(self, user_id: int, req_data: UpdateUserDto):
+    def update_user(self, user_id: int, req_data: UpdateUserDto) -> models.Users:
         user = self.context.query(models.Users).filter(models.Users.Id == user_id).first()
         if user is None:
             return None
@@ -42,3 +45,14 @@ class UserSaService(UserServiceBase):
         self.context.add(user)
         self.context.commit()
         return user
+
+    def login(self, req: LoginReqDto, _token: TokenToolBase) -> str:
+        user = self.context.query(models.Users).filter(models.Users.UserName == req.username).first()
+        if user is None:
+            raise NotFoundException('user not found')
+
+        if bcrypt.checkpw(req.password.encode('utf-8'), user.HashedPassword):
+            return _token.create_token(
+                {'sub': str(user.Id), 'username': user.UserName, 'iat': datetime.datetime.now().timestamp(),
+                 'exp': datetime.datetime.now().timestamp() + (3600 * 24 * 7)})
+        raise NotFoundException('user not found')

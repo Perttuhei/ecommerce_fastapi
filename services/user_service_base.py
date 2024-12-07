@@ -1,5 +1,6 @@
 import abc
-from dtos.users import UpdateUserDto, AddUserReqDto
+from dtos.users import UpdateUserDto, AddUserReqDto, LoginReqDto
+from tools.token_tool_base import TokenToolBase
 
 
 class UserServiceBase(abc.ABC):
@@ -18,4 +19,8 @@ class UserServiceBase(abc.ABC):
 
     @abc.abstractmethod
     def create(self, req: AddUserReqDto):
+        raise NotImplementedError()
+
+    @abc.abstractmethod
+    def login(self, req: LoginReqDto, _token: TokenToolBase) -> str:
         raise NotImplementedError()
