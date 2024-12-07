@@ -1,6 +1,8 @@
 from typing import List
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi_pagination import Page, paginate
+
+from dependencies import LoggedInUser, get_moderator_user
 from dtos.users import AddUserReqDto, UserDto, UpdateUserDto, LoginReqDto, LoginResDto
 from mapper.mapper import ResponseMapper
 from services.service_factory import UserService
@@ -18,14 +20,23 @@ def get_all_users(service: UserService, mapper: ResponseMapper) -> List[UserDto]
     users = service.get_all()
     return paginate(mapper.map("user_dto", users))
 
-@router.get('/{user_id}')
-def get_user_by_id(user_id: int, service: UserService, mapper: ResponseMapper) -> UserDto:
-    user = service.get_by_id(user_id)
-    return mapper.map("user_dto", user)
+@router.get('/account')
+async def get_account(account: LoggedInUser, mapper: ResponseMapper) -> UserDto:
+    return mapper.map("user_dto", account)
 
 @router.post('/register')
 def create_user(service: UserService, req: AddUserReqDto, mapper: ResponseMapper) -> UserDto:
     user = service.create(req)
+    return mapper.map("user_dto", user)
+
+@router.post('/login')
+async def login(service: UserService, req: LoginReqDto, _token: AppToken) -> LoginResDto:
+    token = service.login(req, _token)
+    return LoginResDto(token=token)
+
+@router.get('/{user_id}')
+def get_user_by_id(user_id: int, service: UserService, mapper: ResponseMapper) -> UserDto:
+    user = service.get_by_id(user_id)
     return mapper.map("user_dto", user)
 
 @router.put('/{user_id}')
@@ -33,7 +44,5 @@ def update_user(user_id: int, service: UserService, mapper: ResponseMapper, req_
     user = service.update_user(user_id, req_data)
     return mapper.map("user_dto", user)
 
-@router.post('/login')
-async def login(service: UserService, req: LoginReqDto, _token: AppToken) -> LoginResDto:
-    token = service.login(req, _token)
-    return LoginResDto(token=token)
+
+

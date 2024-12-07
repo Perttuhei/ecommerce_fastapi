@@ -20,7 +20,7 @@ class UserSaService(UserServiceBase):
         return users
 
     def get_by_id(self, user_id: int) -> models.Users:
-        user = self.context.query(models.Users).filter(models.Users.Id == user_id).first()
+        user = self.context.query(models.Users).filter(models.Users.Id == int(user_id)).first()
         return user
 
     def update_user(self, user_id: int, req_data: UpdateUserDto) -> models.Users:
