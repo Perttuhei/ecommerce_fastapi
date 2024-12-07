@@ -1,5 +1,5 @@
 import abc
-from dtos.users import UpdateUserDto, AddUserReqDto, LoginReqDto
+from dtos.users import UpdateUserDto, AddUserReqDto, LoginReqDto, LoginResDto
 from tools.token_tool_base import TokenToolBase
 
 
@@ -22,5 +22,5 @@ class UserServiceBase(abc.ABC):
         raise NotImplementedError()
 
     @abc.abstractmethod
-    def login(self, req: LoginReqDto, _token: TokenToolBase) -> str:
+    def login(self, req: LoginReqDto, _token: TokenToolBase) -> LoginResDto:
         raise NotImplementedError()

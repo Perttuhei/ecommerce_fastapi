@@ -20,3 +20,8 @@ class LoginReqDto(BaseModel):
 
 class LoginResDto(BaseModel):
     token: str
+    user: UserDto
+
+class ApiLoginResDto(BaseModel):
+    token: str
+    user: UserDto

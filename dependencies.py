@@ -1,6 +1,7 @@
 from typing import Annotated
 
 from fastapi import Depends
+from fastapi.security import OAuth2PasswordBearer
 from starlette.requests import Request
 
 import models
@@ -10,30 +11,29 @@ from services.service_factory import UserService
 from tools.token_factory import AppToken
 
 
-def get_logged_in_user(service: UserService, token: AppToken, req: Request) -> models.Users:
-    token_from_header = req.headers.get('Authorization')
-    if token_from_header is None:
+oauth_scheme = OAuth2PasswordBearer(tokenUrl='/api/auth/api_login', auto_error=False)
+
+def get_logged_in_user(service: UserService, token: AppToken, authorization: Annotated[str, Depends(oauth_scheme)] = None) -> models.Users:
+    # oauth2pass... tarkistaa käyttäjän tokenin, jos authorization true ja tokenin validointi onnistuu niin haetaan käyttäjä
+    if authorization is None:
         raise UnauthorizedException()
-    header_parts = token_from_header.split(' ')
-    if len(header_parts) != 2:
+    validated = token.validate_token(authorization)
+    if validated is None:
         raise UnauthorizedException()
-    if header_parts[0] != 'Bearer':
-        raise UnauthorizedException()
-    claims = token.validate_token(header_parts[1])
-    user = service.get_by_id(claims['sub'])
+    user = service.get_by_id(validated['sub'])
     if user is None:
         raise UnauthorizedException()
     return user
 
-def get_moderator_user(service: UserService, token: AppToken, req: Request) -> models.Users:
-    loggedInUser = get_logged_in_user(service, token, req)
+def get_moderator_user(service: UserService, token: AppToken, authorization: Annotated[str, Depends(oauth_scheme)] = None) -> models.Users:
+    loggedInUser = get_logged_in_user(service, token, authorization)
     role = loggedInUser.Role
     if role != 'moderator':
         raise ForbiddenException()
     return loggedInUser
 
-def get_admin_user(service: UserService, token: AppToken, req: Request) -> models.Users:
-    loggedInUser = get_logged_in_user(service, token, req)
+def get_admin_user(service: UserService, token: AppToken, authorization: Annotated[str, Depends(oauth_scheme)] = None) -> models.Users:
+    loggedInUser = get_logged_in_user(service, token, authorization)
     role = loggedInUser.Role
     if role != 'admin':
         raise ForbiddenException()

@@ -46,7 +46,7 @@ class UserSaService(UserServiceBase):
         self.context.commit()
         return user
 
-    def login(self, req: LoginReqDto, _token: TokenToolBase) -> str:
+    def login(self, req: LoginReqDto, _token: TokenToolBase):
         user = self.context.query(models.Users).filter(models.Users.UserName == req.username).first()
         if user is None:
             raise NotFoundException('user not found')
@@ -54,5 +54,5 @@ class UserSaService(UserServiceBase):
         if bcrypt.checkpw(req.password.encode('utf-8'), user.HashedPassword):
             return _token.create_token(
                 {'sub': str(user.Id), 'username': user.UserName, 'iat': datetime.datetime.now().timestamp(),
-                 'exp': datetime.datetime.now().timestamp() + (3600 * 24 * 7)})
+                 'exp': datetime.datetime.now().timestamp() + (3600 * 24 * 7)}), user
         raise NotFoundException('user not found')

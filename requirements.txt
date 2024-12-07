@@ -4,3 +4,4 @@ fastapi
 uvicorn[standard]
 bcrypt
 pyjwt
+python-multipart
