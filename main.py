@@ -1,5 +1,6 @@
 from flask.cli import load_dotenv
 from controllers import products, categories, auth
+from custom_exceptions.forbidden_exception import ForbiddenException
 from custom_exceptions.not_found_exception import NotFoundException
 from custom_exceptions.unauthorized_exception import UnauthorizedException
 from custom_exceptions.username_taken_exception import UsernameTakenException
@@ -28,3 +29,7 @@ async def username_taken_exception(request, exc):
 @app.exception_handler(UnauthorizedException)
 async def unauthorized_exception(request, exc):
     raise HTTPException(detail=str(exc), status_code=401)
+
+@app.exception_handler(ForbiddenException)
+async def forbidden_exception(request, exc):
+    raise HTTPException(detail=str(exc), status_code=403)
