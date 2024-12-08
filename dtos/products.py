@@ -5,17 +5,17 @@ class ProductDto(BaseModel):
     id: int
     name: str
     categoryid: int
-    unitprice: float
+    unitprice: int
     description: str
 
 class UpdateProductDto(BaseModel):
     name: str
-    unitprice: float
+    unitprice: int
     description: str
 
 class AddProductReqDto(BaseModel):
     Name: str
     CategoryId: int
-    UnitPrice: float
+    UnitPrice: int
     Description: str
 
