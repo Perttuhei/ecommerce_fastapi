@@ -29,14 +29,14 @@ def get_moderator_user(service: UserService, token: AppToken, authorization: Ann
     loggedInUser = get_logged_in_user(service, token, authorization)
     role = loggedInUser.Role
     if role != 'moderator':
-        raise ForbiddenException()
+        raise ForbiddenException("required moderator role")
     return loggedInUser
 
 def get_admin_user(service: UserService, token: AppToken, authorization: Annotated[str, Depends(oauth_scheme)] = None) -> models.Users:
     loggedInUser = get_logged_in_user(service, token, authorization)
     role = loggedInUser.Role
     if role != 'admin':
-        raise ForbiddenException()
+        raise ForbiddenException("required admin role")
     return loggedInUser
 
 ModeratorUser = Annotated[models.Users, Depends(get_moderator_user)]

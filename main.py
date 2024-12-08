@@ -1,5 +1,6 @@
 from flask.cli import load_dotenv
 from controllers import products, categories, auth, cart
+from custom_exceptions.category_exist_exception import CategoryExistsException
 from custom_exceptions.forbidden_exception import ForbiddenException
 from custom_exceptions.not_found_exception import NotFoundException
 from custom_exceptions.unauthorized_exception import UnauthorizedException
@@ -34,3 +35,7 @@ async def unauthorized_exception(request, exc):
 @app.exception_handler(ForbiddenException)
 async def forbidden_exception(request, exc):
     raise HTTPException(detail=str(exc), status_code=403)
+@app.exception_handler(CategoryExistsException)
+async def category_exists_exception(request, exc):
+    raise HTTPException(status_code=400, detail=str(exc))
+

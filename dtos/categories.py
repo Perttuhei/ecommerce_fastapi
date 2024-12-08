@@ -7,6 +7,10 @@ class CategoryDto(BaseModel):
     userid: int
     description: str
 
+class AddCategoryReqDto(BaseModel):
+    name: str
+    description: str
+
 class UpdateCategoryDto(BaseModel):
     name: str
     description: str
