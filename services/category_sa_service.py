@@ -28,7 +28,7 @@ class CategorySaService(CategoryServiceBase):
         self.context.commit()
         return category
 
-    def update_category(self, req: UpdateCategoryReqDto, category_id) -> CategoryDto:
+    def update_category(self, req: UpdateCategoryReqDto, category_id) -> models.Categories:
         category_exists = self.context.query(models.Categories).filter(models.Categories.Name == req.name).first()
         if category_exists is not None:
             raise CategoryExistsException(f"category {req.name} already exists")
@@ -43,9 +43,7 @@ class CategorySaService(CategoryServiceBase):
         category = self.context.query(models.Categories).filter(models.Categories.Id == category_id).first()
         if category is None:
             raise NotFoundException(f"category ID: {category_id} not found")
-        category_products = self.context.query(models.Products).filter(models.Products.CategoryId == category_id).all()
-        for product in category_products:
-            self.context.delete(product)
+        self.context.query(models.Products).where(models.Products.CategoryId == category_id).delete()
         self.context.delete(category)
         self.context.commit()
         return "delete ok"

@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 from mapper.category_profile import CategoryProfile
 from mapper.cart_profile import CartProfile
+from mapper.order_profile import OrderProfile
 from mapper.product_profile import ProductProfile
 from mapper.user_profile import UserProfile
 
@@ -18,3 +19,6 @@ def create_category_profile(_type: Type[BaseModel]):
 
 def create_cart_profile(_type: Type[BaseModel]):
     return CartProfile(_type)
+
+def create_order_profile(_type: Type[BaseModel]):
+    return OrderProfile(_type)

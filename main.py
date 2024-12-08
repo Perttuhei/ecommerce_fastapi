@@ -1,5 +1,5 @@
 from flask.cli import load_dotenv
-from controllers import products, categories, auth, cart
+from controllers import products, categories, auth, cart, order
 from custom_exceptions.category_exist_exception import CategoryExistsException
 from custom_exceptions.forbidden_exception import ForbiddenException
 from custom_exceptions.not_found_exception import NotFoundException
@@ -19,6 +19,7 @@ app.include_router(auth.router)
 app.include_router(products.router)
 app.include_router(categories.router)
 app.include_router(cart.router)
+app.include_router(order.router)
 
 @app.exception_handler(NotFoundException)
 async def not_found(request, exc):
