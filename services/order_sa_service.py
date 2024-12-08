@@ -12,11 +12,14 @@ class OrderSaService(OrderServiceBase):
         self.context = context
 
 
-    def order_products(self, user_id) -> OrderResDto:
+    def order_products(self, user_id) -> models.Orders:
         order = self.context.query(models.Orders).filter(models.Orders.CustomerId == user_id).first()
         if order is None:
             raise NotFoundException("order not found")
         order.State = "ordered-state"
+        order.ConfirmedDate = str(order.ConfirmedDate)
+        order.RemovedDate = str(order.RemovedDate)
+        order.HandlerId = int(0)
         self.context.commit()
         return order
 
