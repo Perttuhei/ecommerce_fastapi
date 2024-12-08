@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from fastapi_pagination import Page, paginate
 
-from dependencies import ModeratorUser
+from dependencies import AdminUser
 from dtos.categories import CategoryDto, AddCategoryReqDto
 from dtos.products import ProductDto
 from mapper.mapper import ResponseMapper
@@ -20,7 +20,7 @@ def get_all_categories(service: CategoryService, mapper: ResponseMapper) -> List
     return mapper.map("category_dto", categories)
 
 @router.post('/')
-def add_category(service: CategoryService, req: AddCategoryReqDto, account: ModeratorUser, mapper: ResponseMapper) -> CategoryDto:
+def add_category(service: CategoryService, req: AddCategoryReqDto, account: AdminUser, mapper: ResponseMapper) -> CategoryDto:
     user_id = account.Id
     category = service.add_category(req, user_id)
     return mapper.map("category_dto", category)
