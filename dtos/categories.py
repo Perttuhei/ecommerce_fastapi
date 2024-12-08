@@ -11,6 +11,6 @@ class AddCategoryReqDto(BaseModel):
     name: str
     description: str
 
-class UpdateCategoryDto(BaseModel):
+class UpdateCategoryReqDto(BaseModel):
     name: str
     description: str
