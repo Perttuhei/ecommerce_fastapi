@@ -26,7 +26,7 @@ class CartSaService(CartServiceBase):
                 CustomerId=user_id,
                 ConfirmedDate=None,
                 RemovedDate=None,
-                HandlerId=user_id
+                HandlerId=None
             )
             self.context.add(NewOrder)
             self.context.commit()
