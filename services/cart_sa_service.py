@@ -53,7 +53,7 @@ class CartSaService(CartServiceBase):
             self.context.commit()
             return newitem
 
-    def get_cart_item_by_id(self, item_id: int, user_id) -> CartDto:
+    def get_cart_item_by_id(self, item_id: int, user_id) -> models.OrdersProducts:
         order = self.context.query(models.Orders).filter(models.Orders.CustomerId == user_id).first()
         order_id = order.Id
         item = self.context.query(
@@ -71,7 +71,7 @@ class CartSaService(CartServiceBase):
         self.context.commit()
         return item
 
-    def delete_item(self, item_id: int, user_id) -> DeleteItemResDto:
+    def delete_item(self, item_id: int, user_id) -> models.OrdersProducts:
         # poisteaan item jos ostoskori ja poistettava tuote löytyy
         order = self.context.query(models.Orders).filter(models.Orders.CustomerId == user_id).first()
         order_id = order.Id

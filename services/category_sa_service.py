@@ -15,7 +15,7 @@ class CategorySaService(CategoryServiceBase):
         categories = self.context.query(models.Categories).all()
         return categories
 
-    def add_category(self, req: AddCategoryReqDto, user_id) -> CategoryDto:
+    def add_category(self, req: AddCategoryReqDto, user_id) -> models.Categories:
         category_exists = self.context.query(models.Categories).filter(models.Categories.Name == req.name).first()
         if category_exists is not None:
             raise CategoryExistsException()
