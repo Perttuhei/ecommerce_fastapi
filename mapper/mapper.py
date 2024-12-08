@@ -2,10 +2,12 @@ from typing import Annotated
 from fastapi.params import Depends
 
 from dtos.categories import CategoryDto
+from dtos.items import CartDto
 from dtos.products import ProductDto, AddProductReqDto
 from dtos.users import UserDto
 from mapper.base_profile import BaseProfile
-from mapper.profile_factory import create_user_profile, create_product_profile, create_category_profile
+from mapper.profile_factory import create_user_profile, create_product_profile, create_category_profile, \
+    create_cart_profile
 
 
 class Mapper:
@@ -28,7 +30,8 @@ def create_mapper() -> Mapper:
         'user_dto': create_user_profile(UserDto),
         'product_dto': create_product_profile(ProductDto),
         'category_dto': create_category_profile(CategoryDto),
-        'product_req_dto': create_product_profile(AddProductReqDto)
+        'product_req_dto': create_product_profile(AddProductReqDto),
+        'cart_dto': create_cart_profile(CartDto)
     }
     return Mapper(profiles)
 
