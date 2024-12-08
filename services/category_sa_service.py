@@ -39,11 +39,14 @@ class CategorySaService(CategoryServiceBase):
         return category
 
     def delete_category(self, category_id: int) -> str:
+        # id perusteella haetaan kategoria ja tuotteet, jos löytyy niin poistetaan
         category = self.context.query(models.Categories).filter(models.Categories.Id == category_id).first()
         if category is None:
-            raise NotFoundException(f"category ID:{category_id} not found")
+            raise NotFoundException(f"category ID: {category_id} not found")
         category_products = self.context.query(models.Products).filter(models.Products.CategoryId == category_id).all()
-        self.context.delete(category_products)
+        for product in category_products:
+            self.context.delete(product)
         self.context.delete(category)
-        return ""
+        self.context.commit()
+        return "delete ok"
 
