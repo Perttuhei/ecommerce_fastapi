@@ -1,5 +1,6 @@
 import models
 from custom_exceptions.category_exist_exception import CategoryExistsException
+from custom_exceptions.not_found_exception import NotFoundException
 from dtos.categories import AddCategoryReqDto, CategoryDto, UpdateCategoryReqDto
 from services.category_service_base import CategoryServiceBase
 
@@ -36,4 +37,13 @@ class CategorySaService(CategoryServiceBase):
         category.Description = req.description
         self.context.commit()
         return category
+
+    def delete_category(self, category_id: int) -> str:
+        category = self.context.query(models.Categories).filter(models.Categories.Id == category_id).first()
+        if category is None:
+            raise NotFoundException(f"category ID:{category_id} not found")
+        category_products = self.context.query(models.Products).filter(models.Products.CategoryId == category_id).all()
+        self.context.delete(category_products)
+        self.context.delete(category)
+        return ""
 

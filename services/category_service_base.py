@@ -15,3 +15,7 @@ class CategoryServiceBase(abc.ABC):
     @abc.abstractmethod
     def update_category(self, req: UpdateCategoryReqDto, category_id: int) -> CategoryDto:
         raise NotImplementedError()
+
+    @abc.abstractmethod
+    def delete_category(self, category_id: int) -> str:
+        raise NotImplementedError()

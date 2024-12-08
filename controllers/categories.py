@@ -32,6 +32,10 @@ def get_products_by_category(category_id: int, service: ProductService, mapper: 
 
 @router.put('/{category_id}', dependencies=[Depends(get_admin_user)])
 def update_category(service: CategoryService, req: UpdateCategoryReqDto, category_id: int, mapper: ResponseMapper) -> CategoryDto:
-    print("kontrolleri")
     category = service.update_category(req, category_id)
     return mapper.map("category_dto", category)
+
+@router.delete('/{category_id}', dependencies=[Depends(get_admin_user)])
+def delete_category(service: CategoryService, category_id: int) -> str:
+    response = service.delete_category(category_id)
+    return response
