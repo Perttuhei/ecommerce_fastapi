@@ -12,6 +12,8 @@ class OrderDto(BaseModel):
     id: int
     createddate: str
     customerid: int
+    confirmeddate: str
+    removeddate: str
     handlerid: int
     state: str
 

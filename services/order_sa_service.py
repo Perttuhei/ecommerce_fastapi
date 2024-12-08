@@ -1,3 +1,5 @@
+import datetime
+
 import models
 from custom_exceptions.not_found_exception import NotFoundException
 from dtos.orders import OrderResDto
@@ -15,5 +17,16 @@ class OrderSaService(OrderServiceBase):
         if order is None:
             raise NotFoundException("order not found")
         order.State = "ordered-state"
+        self.context.commit()
+        return order
+
+    def order_confirm(self, user_id: int, order_id: int) -> models.Orders:
+        order = self.context.query(models.Orders).filter(models.Orders.Id == order_id).first()
+        if order is None:
+            raise NotFoundException("order not found")
+        print(datetime.datetime.now())
+        order.ConfirmedDate = str(datetime.datetime.now())
+        order.State = "confirmed-state"
+        order.HandlerId = user_id
         self.context.commit()
         return order

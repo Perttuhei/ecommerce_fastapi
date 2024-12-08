@@ -6,7 +6,7 @@ from mapper.base_profile import BaseProfile
 
 
 class OrderProfile(BaseProfile):
-    exclude = ['metadata', 'RemovedDate']
+    exclude = ['metadata']
 
     def __init__(self, dst_type: Type[BaseModel]):
         self.dst_type = dst_type
@@ -42,5 +42,4 @@ class OrderProfile(BaseProfile):
             if key.lower() not in fields:
                 continue
             significant_vars[key.lower()] = value
-        print(f"sig vars :{significant_vars}")
         return significant_vars
