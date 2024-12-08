@@ -33,3 +33,15 @@ class OrderSaService(OrderServiceBase):
         order.HandlerId = user_id
         self.context.commit()
         return order
+
+    def delete_order(self, order_id: int, user_id: int) -> str:
+        order = self.context.query(models.Orders).filter(models.Orders.Id == order_id, models.Orders.CustomerId == user_id).first()
+        if order is None:
+            raise NotFoundException("order not found")
+        state = str(order.State)
+        if state == "confirmed-state":
+            return "order already confirmed, order cannot be deleted"
+        self.context.query(models.OrdersProducts).where(models.OrdersProducts.OrderId == order_id).delete()
+        self.context.delete(order)
+        self.context.commit()
+        return "delete ok"

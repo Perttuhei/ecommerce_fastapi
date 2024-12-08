@@ -17,3 +17,5 @@ class OrderDto(BaseModel):
     handlerid: int
     state: str
 
+class DeleteOrderResDto(BaseModel):
+    response: str

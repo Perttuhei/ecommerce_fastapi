@@ -13,3 +13,7 @@ class OrderServiceBase(abc.ABC):
     @abc.abstractmethod
     def order_confirm(self, user_id: int, order_id: int) -> models.Orders:
         raise NotImplementedError()
+
+    @abc.abstractmethod
+    def delete_order(self, order_id: int, user_id: int) -> str:
+        raise NotImplementedError()
