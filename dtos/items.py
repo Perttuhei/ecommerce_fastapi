@@ -7,6 +7,9 @@ class AddItemReqDto(BaseModel):
 class DeleteItemResDto(BaseModel):
     response: str
 
+class UpdateItemReqDto(BaseModel):
+    unitcount: int
+
 class CartDto(BaseModel):
     orderid: int
     productid: int

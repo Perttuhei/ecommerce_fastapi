@@ -3,7 +3,7 @@ from typing import List
 
 import models
 from custom_exceptions.not_found_exception import NotFoundException
-from dtos.items import AddItemReqDto, DeleteItemResDto
+from dtos.items import AddItemReqDto, DeleteItemResDto, UpdateItemReqDto, CartDto
 from services.cart_service_base import CartServiceBase
 
 
@@ -53,6 +53,23 @@ class CartSaService(CartServiceBase):
             self.context.commit()
             return newitem
 
+    def get_cart_item_by_id(self, item_id: int, user_id) -> CartDto:
+        order = self.context.query(models.Orders).filter(models.Orders.CustomerId == user_id).first()
+        order_id = order.Id
+        item = self.context.query(
+            models.OrdersProducts) \
+            .filter(models.OrdersProducts.OrderId == order_id,
+                    models.OrdersProducts.ProductId == item_id).first()
+        if item is None:
+            raise NotFoundException("item not found")
+        return item
+    def update_item(self, item_id: int, user_id, req: UpdateItemReqDto) -> CartDto:
+        item = self.get_cart_item_by_id(item_id, user_id)
+        if item is None:
+            raise NotFoundException("item not found")
+        item.UnitCount = req.unitcount
+        self.context.commit()
+        return item
 
     def delete_item(self, item_id: int, user_id) -> DeleteItemResDto:
         # poisteaan item jos ostoskori ja poistettava tuote löytyy
