@@ -1,4 +1,4 @@
-# sovelluskehykset_ecommerce_fastapi
+# ecommerce_fastapi
 
 
 
@@ -15,14 +15,12 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://peke.plab.fi/peheikka/sovelluskehykset_ecommerce_fastapi.git
+git remote add origin 
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
-
-- [ ] [Set up project integrations](https://peke.plab.fi/peheikka/sovelluskehykset_ecommerce_fastapi/-/settings/integrations)
 
 ## Collaborate with your team
 
